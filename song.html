@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>You Know What 💖</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&display=swap" rel="stylesheet">
+<style>
+  :root{--bg1:#ffe8f3;--bg2:#ffd6ec;--ink:#4a2f44;--hot:#ff0066;--cute:#ff96c6;--card:#ffffff}
+  *{box-sizing:border-box} html,body{height:100%;margin:0}
+  body{
+    font-family:"Baloo 2",system-ui,sans-serif;color:var(--ink);
+    background:linear-gradient(135deg,var(--bg1),var(--bg2));
+    min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:22px;
+  }
+  h1{margin:0 0 10px;line-height:1.12;font-weight:800;text-transform:uppercase;
+     font-size:clamp(46px,9vw,120px);background:linear-gradient(90deg,#ff2d6b,#ff9acb);
+     -webkit-background-clip:text;background-clip:text;color:transparent}
+
+  /* subtitle (first letter uppercase only) */
+  p.sub{
+    margin:0 0 20px;font-weight:800;
+    font-size:clamp(28px,4vw,46px);color:#ff3c86;text-transform:none;
+  }
+  p.sub::first-letter{ text-transform:uppercase }
+
+  /* heart play/pause */
+  .heart{
+    display:flex;justify-content:center;align-items:center;
+    margin:10px auto 16px; width:120px; height:120px; border-radius:999px; border:none; cursor:pointer;
+    background:radial-gradient(circle at 30% 30%, var(--hot), #c1004f);
+    box-shadow:0 22px 60px rgba(255,0,102,.45), 0 0 0 6px #ffffff55;
+    transition:transform .08s ease;
+  }
+  .heart:active{ transform:scale(.97) }
+  .heart span{ font-size:58px; line-height:1; display:block; transform:translateY(2px);
+    color:#fff; filter:drop-shadow(0 2px 2px rgba(0,0,0,.25)) }
+  .beating{ animation:beat 0.9s ease-in-out infinite }
+  @keyframes beat{
+    0%{ transform:scale(1) } 25%{ transform:scale(1.06) }
+    50%{ transform:scale(1) } 75%{ transform:scale(1.06) } 100%{ transform:scale(1) }
+  }
+
+  /* seek bar (click + drag like YT) */
+  .bar{
+    position:relative;width:min(900px,92vw);height:16px;margin:14px auto;
+    border-radius:999px;background:#ffe2ef;overflow:hidden;display:none;touch-action:none;
+  }
+  .fill{position:absolute;left:0;top:0;height:100%;width:0;background:linear-gradient(90deg,var(--hot),var(--cute))}
+  .knob{
+    position:absolute;top:50%;transform:translate(-50%,-50%);
+    width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.22);
+    pointer-events:none;
+  }
+
+  /* subtitles panel */
+  .panel{width:min(1000px,96vw);margin:10px auto 0;text-align:left;background:var(--card);
+         border-radius:24px;padding:18px 22px;box-shadow:0 18px 44px rgba(255,105,180,.25)}
+  .line{font-size:clamp(24px,3.8vw,40px);font-weight:800;margin:0;color:#2b1824}
+  .mean{font-size:clamp(16px,2.4vw,24px);margin:.25rem 0 0;color:#6b5a67;font-weight:700}
+  .fade{animation:fade .35s ease forwards}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  #subs{display:none}
+</style>
+</head>
+<body>
+  <main>
+    <h1>YOU KNOW WHAT, I WANT TO TELL YOU SOMETHING</h1>
+    <p class="sub">listen to this first &lt;3</p>
+
+    <!-- centered heart -->
+    <button id="play" class="heart" aria-label="Play / pause"><span>🤍</span></button>
+
+    <!-- draggable seek bar -->
+    <div class="bar" id="bar" role="slider" aria-label="Seek" aria-valuemin="0" aria-valuemax="100" tabindex="0">
+      <div class="fill" id="fill"></div>
+      <div class="knob" id="knob" style="left:0%"></div>
+    </div>
+
+    <section class="panel" aria-live="polite" aria-atomic="true">
+      <p id="l" class="line">…</p>
+      <p id="m" class="mean">Press the heart to start</p>
+    </section>
+
+    <audio id="song" preload="auto" playsinline>
+      <source src="JHOL.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Subtitles (supports 00:02.04 etc.) -->
+    <script type="text/plain" id="subs">
+[00:00] Mera Koyi Hor Nahi Eh Das Dita Duniya Nu, | I have no one else; I have told this to the world,
+[00:02.50] Jadon Vi Ave Apne Nal Lave Khushiyan Nu, | Whenever you come, you bring happiness with you,
+[00:06.07] Jadon Vi Door Jave Jan Sadi Kadd Jave, | Whenever you go far, you take my life with you,
+[00:09.08] Sajna Eh Tere Kol Vasna Hi Chave, | My love, I want to reside near you,
+[00:11.43] Muskura Ke Le Litti Ae Sadi Zimmewari, | You smiled and took responsibility for me,
+[00:14.70] Nahi Main Nahi Kitti Kadi Vi Tere Ton Badgumani, | I never had any doubts about you,
+[00:18.00] Tu Mera Yar Si Dil Asman Par Si, | You were my friend; my heart was beyond the sky,
+[00:21.20] Ah Do Dilan Da Pyar Si Oh Pyar Na Si Kagazi Par... | This was love of two hearts; it wasn’t just on paper...
+    </script>
+  </main>
+
+<script>
+  // Elements
+  const audio = document.getElementById('song');
+  const playBtn = document.getElementById('play');
+  const bar = document.getElementById('bar'), fill = document.getElementById('fill'), knob = document.getElementById('knob');
+  const L = document.getElementById('l'), M = document.getElementById('m');
+
+  // Parse subtitles from block
+  function parseSubs(txt){
+    const rows=[]; const lines = txt.split(/\r?\n/).map(s=>s.trim()).filter(Boolean);
+    for(const ln of lines){
+      const m = ln.match(/^\[(\d{1,2}):(\d{2})(?:\.(\d{1,3}))?\]\s*(.+)$/); if(!m) continue;
+      const mm=+m[1], ss=+m[2], ms=m[3]?+m[3].padEnd(3,'0'):0;
+      const [line,mean=''] = m[4].split(/\s*\|\s*/);
+      rows.push({t:mm*60+ss+ms/1000, line, mean});
+    }
+    for(let i=0;i<rows.length;i++) rows[i].end = (i<rows.length-1)?rows[i+1].t:Infinity;
+    return rows;
+  }
+  const CUES = parseSubs(document.getElementById('subs').textContent);
+  let current = -1;
+
+  function setCue(i){
+    if(i<0 || i>=CUES.length) return;
+    L.textContent = CUES[i].line;
+    M.textContent = CUES[i].mean || '';
+    L.classList.remove('fade'); M.classList.remove('fade'); void L.offsetWidth;
+    L.classList.add('fade'); M.classList.add('fade');
+  }
+  function setProgress(p){ fill.style.width = (p*100)+'%'; knob.style.left = (p*100)+'%'; }
+
+  function update(){
+    if (!isFinite(audio.duration) || audio.duration<=0) return;
+    const t = audio.currentTime;
+    const p = Math.min(1, Math.max(0, t / audio.duration));
+    setProgress(p);
+    const i = CUES.findIndex(c => t >= c.t && t < c.end);
+    if (i !== -1 && i !== current){ current = i; setCue(i); }
+  }
+
+  audio.addEventListener('loadedmetadata', ()=>{ bar.style.display='block'; setProgress(0); });
+  audio.addEventListener('timeupdate', update);
+  audio.addEventListener('ended', ()=>{ window.location.href='surprise.html'; });
+
+  // Play/resume (single), pause (double)
+  playBtn.addEventListener('click', async ()=>{
+    try{
+      if (audio.paused) {
+        if (!isNaN(audio.duration) && audio.currentTime === 0) current = -1;
+        await audio.play();
+        playBtn.classList.add('beating');
+        playBtn.firstElementChild.textContent='💖';
+      }
+    }catch(e){ alert('Tap again to allow audio.'); }
+  });
+  playBtn.addEventListener('dblclick', ()=>{ if(!audio.paused){ audio.pause(); playBtn.classList.remove('beating'); playBtn.firstElementChild.textContent='🤍'; }});
+  let lastTap=0;
+  playBtn.addEventListener('touchend',(e)=>{
+    const now=Date.now();
+    if(now-lastTap<350){ e.preventDefault(); if(!audio.paused){ audio.pause(); playBtn.classList.remove('beating'); playBtn.firstElementChild.textContent='🤍'; } }
+    lastTap=now;
+  },{passive:false});
+
+  // Seek: click & drag (mouse/touch/pen)
+  let scrubbing=false, wasPlaying=false;
+  function pctFromClientX(x){ const r=bar.getBoundingClientRect(); return Math.min(1, Math.max(0, (x-r.left)/r.width)); }
+  function seekTo(p){
+    if (!isFinite(audio.duration) || audio.duration<=0) return;
+    audio.currentTime = p * audio.duration; setProgress(p);
+    const t = audio.currentTime; const i = CUES.findIndex(c => t>=c.t && t<c.end);
+    if (i !== -1 && i !== current){ current=i; setCue(i); }
+  }
+  bar.addEventListener('pointerdown', (e)=>{ if(!isFinite(audio.duration)) return;
+    bar.setPointerCapture(e.pointerId); scrubbing=true; wasPlaying=!audio.paused; if(wasPlaying) audio.pause(); seekTo(pctFromClientX(e.clientX)); });
+  bar.addEventListener('pointermove', (e)=>{ if(scrubbing) seekTo(pctFromClientX(e.clientX)); });
+  bar.addEventListener('pointerup', async (e)=>{ if(!scrubbing) return; seekTo(pctFromClientX(e.clientX)); scrubbing=false; if(wasPlaying){ try{ await audio.play(); playBtn.classList.add('beating'); playBtn.firstElementChild.textContent='💖'; }catch(_){} } });
+</script>
+</body>
+</html>

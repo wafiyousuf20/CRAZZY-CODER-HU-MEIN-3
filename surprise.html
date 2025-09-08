@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MY HEART 💖</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&display=swap" rel="stylesheet">
+<style>
+  :root{ --bg1:#ffe8f3; --bg2:#ffd6ec; --ink:#3c2034; --hot:#ff0066; --card:#ffffff; }
+  *{box-sizing:border-box} html,body{height:100%;margin:0}
+  body{
+    font-family:"Baloo 2",system-ui,sans-serif;color:var(--ink);
+    background:
+      radial-gradient(1100px 1100px at -10% -10%, #fff6fb 0%, transparent 60%),
+      radial-gradient(1100px 1100px at 110% 110%, #fff1f8 0%, transparent 60%),
+      linear-gradient(135deg,var(--bg1),var(--bg2));
+    display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;overflow-x:hidden;
+  }
+
+  /* headings = ALL CAPS */
+  h1,h2{ text-transform:uppercase; }
+  h1{
+    margin:0 0 8px; font-weight:800; line-height:1.1;
+    font-size:clamp(40px,8vw,92px);
+    background:linear-gradient(90deg,#ff2d6b,#ff9acb); -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+
+  /* body copy = sentence case (first letter uppercase) */
+  p, .cta, .card p { text-transform:none; }
+  p::first-letter, .cta::first-letter { text-transform:uppercase; }
+  p.sub{ margin:0 0 16px; font-weight:800; font-size:clamp(20px,3.6vw,34px); color:#ff3c86; }
+  p.sub::first-letter{ text-transform:uppercase }
+
+  .wrap{ width:min(1100px,96vw); }
+  .stage{ position:relative; margin:16px auto; display:grid; place-items:center; }
+
+  /* heart */
+  .heart{ position:relative; width:min(640px,94vw); aspect-ratio:1/1;
+    filter:drop-shadow(0 24px 70px rgba(255,105,180,.35)); }
+  svg{ width:100%; height:100%; display:block; }
+  .heartBase{ fill:url(#g); pointer-events:none; }
+  .heartShine{ fill:url(#g2); opacity:.15; pointer-events:none; }
+  .beat{ animation:beat 2.2s ease-in-out infinite }
+  @keyframes beat{ 0%{transform:scale(1)} 50%{transform:scale(1.01)} 100%{transform:scale(1)} }
+
+  /* clickable segments */
+  .seg{ cursor:pointer; transition:filter .15s ease; }
+  .seg:hover{ filter:drop-shadow(0 6px 10px rgba(0,0,0,.18)); }
+
+  /* labels (all caps; do not block clicks) */
+  .label{
+    position:absolute; transform:translate(-50%,-50%); pointer-events:none;
+    font-weight:800; font-size:clamp(14px,3.2vw,22px); color:#ffffff; text-shadow:0 2px 6px rgba(0,0,0,.25);
+    letter-spacing:.5px;
+  }
+  .labYOU{ left:32%; top:40%; }
+  .labFELT{ left:72%; top:44%; }
+
+  /* cards */
+  .card{
+    margin:16px auto 0; max-width:min(900px,96vw);
+    background:#ffffffcc; backdrop-filter:blur(6px);
+    border-radius:22px; padding:16px; text-align:left;
+    box-shadow:0 22px 60px rgba(255,105,180,.25); display:none;
+  }
+  .card.show{ display:block; animation:fade .35s ease both }
+  @keyframes fade{ from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:none} }
+  .card h2{ margin:0 0 6px; font-size:clamp(22px,3.8vw,34px); color:#5a2a46 }
+  .card p{ margin:6px 0 0; font-weight:800; font-size:clamp(16px,2.6vw,22px); color:#6d5263 }
+
+  /* centered photo */
+  .phWrap{ display:grid; place-items:center; margin-bottom:8px; }
+  .ph{ width:min(360px,76vw); border-radius:18px; box-shadow:0 14px 36px rgba(0,0,0,.18); display:block }
+
+  /* audio strip */
+  .audioBar{ display:flex; align-items:center; gap:10px; margin-top:8px;
+             background:#fff; border-radius:16px; padding:10px 12px; box-shadow:0 10px 24px rgba(0,0,0,.08) }
+  .play{ width:52px;height:52px;border:none;border-radius:14px;cursor:pointer;font-weight:900;
+         background:linear-gradient(90deg,#ff2d6b,#ff9acb); color:#fff; box-shadow:0 10px 22px rgba(255,105,180,.35) }
+  .seek{ -webkit-appearance:none; appearance:none; width:100%; height:10px; border-radius:999px; background:#ffe2ef; outline:none }
+  .seek::-webkit-slider-thumb{ -webkit-appearance:none; appearance:none; width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.22) }
+  .time{ font-weight:800; color:#7b5870; min-width:76px; text-align:right }
+
+  /* CTA */
+  .cta{
+    display:inline-block; margin:18px auto 6px; padding:14px 24px; border-radius:16px; text-decoration:none;
+    background:linear-gradient(90deg,#ff2d6b,#ff9acb); color:#fff; font-weight:900; font-size:18px;
+    box-shadow:0 14px 34px rgba(255,105,180,.35);
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>THIS IS MY HEART</h1>
+    <p class="sub">tap a section to open it</p>
+
+    <div class="stage">
+      <div class="heart beat" aria-label="My heart">
+        <svg viewBox="0 0 200 180" aria-hidden="true">
+          <defs>
+            <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#ff2d6b"/><stop offset="100%" stop-color="#ff9acb"/>
+            </linearGradient>
+            <linearGradient id="g2" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#fff"/><stop offset="100%" stop-color="#fff"/>
+            </linearGradient>
+          </defs>
+
+          <!-- base heart (non-interactive) -->
+          <path class="heartBase" d="M100 170 C 20 120, 0 80, 20 50 C 40 20, 80 30, 100 60 C 120 30, 160 20, 180 50 C 200 80, 180 120, 100 170 Z"/>
+          <path class="heartShine" d="M30 65 C50 35,85 35,100 58 C 84 40,52 42,30 65 Z"/>
+
+          <!-- 2 CLICKABLE SEGMENTS -->
+          <!-- LEFT: YOU + IN COMMON -->
+          <path id="segYOU" class="seg" fill="url(#g)"
+                d="M100 170 C 25 125, 4 85, 20 52 C 38 22, 78 30, 100 60 Z" />
+          <!-- RIGHT: I REALLY FELT IT -->
+          <path id="segFELT" class="seg" fill="url(#g)"
+                d="M100 60 C 122 30, 162 22, 180 52 C 196 85, 175 125, 100 170 Z" />
+        </svg>
+
+        <div class="label labYOU">YOU</div>
+        <div class="label labFELT">I REALLY FELT IT</div>
+      </div>
+    </div>
+
+    <!-- CARDS -->
+    <div class="card" id="cardYOU">
+      <h2>YOU</h2>
+      <div class="phWrap">
+        <img class="ph" src="PHOTO.jpg" alt="her photo">
+      </div>
+      <p>we keep finding little things we share. The same jokes, the same cravings, the same late night songs and the same hate. I keep those here with your picture <3.</p>
+    </div>
+
+    <div class="card" id="cardFELT">
+      <h2>I REALLY FELT IT WHEN TALWINDER SAID…</h2>
+      <p>I saved it here and want you hear it again with me <3.</p>
+      <div class="audioBar">
+        <button class="play" id="playBtn" aria-label="Play or pause">►</button>
+        <input type="range" id="seek" class="seek" value="0" min="0" max="100" step="0.1">
+        <div class="time"><span id="cur">0:00</span> / <span id="dur">0:00</span></div>
+      </div>
+      <audio id="clip" preload="auto">
+        <source src="TAWLINDER.mp3" type="audio/mpeg">
+      </audio>
+    </div>
+
+    <a class="cta" href="big-question.html">seen what’s inside my heart? Now answer ➜</a>
+  </div>
+
+<script>
+  // segment -> card toggles
+  const segYOU  = document.getElementById('segYOU');
+  const segFELT = document.getElementById('segFELT');
+
+  const cardYOU  = document.getElementById('cardYOU');
+  const cardFELT = document.getElementById('cardFELT');
+
+  function showOnly(card){
+    [cardYOU, cardFELT].forEach(c=>c.classList.remove('show'));
+    card.classList.add('show');
+    card.scrollIntoView({behavior:'smooth', block:'nearest'});
+  }
+
+  segYOU.addEventListener('click',  ()=>showOnly(cardYOU));
+  segFELT.addEventListener('click', ()=>{ showOnly(cardFELT); tryAutoplay(); });
+
+  // audio controls (auto-play for FELT)
+  const audio = document.getElementById('clip');
+  const playBtn = document.getElementById('playBtn');
+  const seek = document.getElementById('seek');
+  const cur = document.getElementById('cur');
+  const dur = document.getElementById('dur');
+
+  function fmt(t){ if(!isFinite(t)) return '0:00'; const m=Math.floor(t/60), s=Math.floor(t%60); return m+':'+String(s).padStart(2,'0'); }
+  audio.addEventListener('loadedmetadata', ()=>{ dur.textContent = fmt(audio.duration); });
+
+  async function tryAutoplay(){
+    try{
+      audio.currentTime = 0;
+      await audio.play();
+      playBtn.textContent='❚❚';
+    }catch(e){ /* user gesture needed on some browsers; button remains */ }
+  }
+
+  playBtn.addEventListener('click', async ()=>{
+    try{
+      if(audio.paused){ await audio.play(); playBtn.textContent='❚❚'; }
+      else { audio.pause(); playBtn.textContent='►'; }
+    }catch(e){ alert('tap again to allow audio'); }
+  });
+
+  audio.addEventListener('timeupdate', ()=>{
+    cur.textContent = fmt(audio.currentTime);
+    if(isFinite(audio.duration) && audio.duration>0){ seek.value = (audio.currentTime / audio.duration) * 100; }
+  });
+
+  seek.addEventListener('input', ()=>{
+    if(isFinite(audio.duration)){ audio.currentTime = (seek.value/100) * audio.duration; }
+  });
+</script>
+</body>
+</html>
